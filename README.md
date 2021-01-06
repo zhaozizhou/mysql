@@ -1,4 +1,4 @@
-# mysql
-mysql相关
+# python
+python相关
 
-该文档用于测试mysql数据校验脚本
+该目录用于测试python相关脚本
