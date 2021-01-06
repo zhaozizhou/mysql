@@ -1,10 +1,13 @@
 # 解决redis设备替换问题
+
 ```
 1.sentinel name  表
 2.老设备列表
 3.新设备列表
 ```
+
 ## 流程
+
 ```
 1.取sentinel列表值找到目前的redis主
 2.检查主有几个sentinel
