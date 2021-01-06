@@ -1,4 +1,5 @@
-# python
-python相关
+# python-mysql
 
-该目录用于测试python相关脚本
+python相关于mysql的相关脚本
+
+
