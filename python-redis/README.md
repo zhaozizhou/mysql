@@ -10,6 +10,8 @@
 
 ```
 1.取sentinel列表值找到目前的redis主
+  信息存入数据库  
+  库名 server_change
 2.检查主有几个sentinel
 3.检查主有几个从
 4.检查从是否在新设备列表
