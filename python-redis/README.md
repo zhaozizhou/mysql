@@ -12,6 +12,15 @@
 1.取sentinel列表值找到目前的redis主
   信息存入数据库  
   库名 server_change
+  
+create table redis_sentinel (
+	id varchar(500) NOT NULL ,
+	master_name varchar(500) NOT NULL DEFAULT 'NULL',
+	status varchar(500) NOT NULL DEFAULT '0',
+	slave int(10) NOT NULL DEFAULT '0',
+	sentinel int(10) NOT NULL DEFAULT '0' ,PRIMARY KEY (`id`)) 
+	ENGINE=InnoDB
+;
 2.检查主有几个sentinel
 3.检查主有几个从
 4.检查从是否在新设备列表

@@ -7,9 +7,20 @@ from redis.sentinel import Sentinel
 ###声明变量
 dic_name_to_sentinel={}
 
+###创建数据库连接
+#conn = pymysql.connect(host='192.168.1.10', port=3306, user='mozis', passwd='ktlshy34YU$',db='server_change',charset="utf8")
+#cursor = conn.cursor()
+# 使用 execute()  方法执行 SQL 查询 
+#cursor.execute("select name ,topology,data_ip,business_ip,service_name from redis_sentinel where topology = 'RedisMasterSlave';")
+# 使用 fetchone() 方法获取单条数据.
+#data = cursor.fetchall()
+# 关闭数据库连接
+#conn.close()
 
 #取master0  mastername sentinek
 def all_sentinel_get():
+    #conn = pymysql.connect(host='192.168.1.10', port=3306, user='mozis', passwd='ktlshy34YU$',db='server_change',charset="utf8")
+    #cursor = conn.cursor()
     r=redis.Redis(host='192.168.1.10',port=26379)
     #print(r.info(section=None)['master0']['name'])
     all=r.info(section='Sentinel')
