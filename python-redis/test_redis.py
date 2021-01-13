@@ -23,12 +23,12 @@ def all_sentinel_get():
     cursor = conn.cursor()
     try:
         cursor.execute("truncate table redis_sentinel;")
-    except:
-        return("table redis_sentinel not exist")
+    except pymysql.Error as e:
+        return(e.args[0], e.args[1])
     r=redis.Redis(host='192.168.1.10',port=26379)
     #print(r.info(section=None)['master0']['name'])
     all=r.info(section='Sentinel')
-    print(r.info(section='Sentinel')['master0'])
+    #print(r.info(section='Sentinel')['master0'])
     list_master_num=list(r.info(section='Sentinel').keys())
     master_num=list_master_num[4:]
     #print(master_num)
@@ -48,9 +48,59 @@ def all_sentinel_get():
     return("all get ok")
 
 
+##删除不在列表里的sentinle name
+def delete_no_use():
+    conn = pymysql.connect(host='192.168.1.6', port=3306, user='mozis', passwd='ktlshy34YU$',db='server_change',charset="utf8")
+    cursor = conn.cursor()
+    list_table_name_tmp=[]
+    try:
+        f = open("/tools/python_test/python-redis/sentinle_name.txt")             # 返回一个文件对象  
+    except IOError as e:
+        #print(e)
+        return(e)
+    else:
+        lines = f.readlines()
+        for line in lines:
+            list_table_name_tmp.append(line)
+        f.close()
+        list_table_name=[x.strip() for x in list_table_name_tmp]
+        tuple_table_name=tuple(list_table_name)
+        #print(tuple_table_name)
+        try:
+            #cursor.execute("select master_name from redis_sentinel where master_name not in {0};".format(tuple_table_name))
+            #select_master_name_tmp = cursor.fetchall()
+            cursor.execute("delete from redis_sentinel where master_name not in {0};".format(tuple_table_name))
+            conn.commit()
+        except pymysql.Error as e:
+            conn.rollback()
+            conn.close()
+            return(e.args[0], e.args[1])
+        #conn.close()
+        ###删除之后判断是否一致
+        cursor.execute("select count(*) from redis_sentinel ;")
+        count = cursor.fetchall()
+        #print(count[0][0])
+        len_table_name=len(list_table_name)
+        #print(len_table_name)
+        if count[0][0] == len_table_name:
+            print("delete ok")
+            conn.close()
+            return 1
+        else:
+            conn.close()
+            return ("delete error")
+        #return("delete  ok")
+
+
+
+
 def main():
     sentinel_get=all_sentinel_get()
     print(sentinel_get)
+    delete_note=delete_no_use()
+    if delete_note != 1:
+        print("ERROR")
+        return("ERROR")
 
 
 
