@@ -21,6 +21,8 @@ create table redis_sentinel (
 	sentinel int(10) NOT NULL DEFAULT '0' ,PRIMARY KEY (`id`)) 
 	ENGINE=InnoDB
 ;
+
+入库后信息过滤  删除后对比
 2.检查主有几个sentinel
 3.检查主有几个从
 4.检查从是否在新设备列表

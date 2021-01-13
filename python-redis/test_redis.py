@@ -6,6 +6,7 @@ from redis.sentinel import Sentinel
 
 ###声明变量
 dic_name_to_sentinel={}
+num_of_sentinel=3 #判断每个redis的sentinel数
 
 ###创建数据库连接
 #conn = pymysql.connect(host='192.168.1.6', port=3306, user='mozis', passwd='ktlshy34YU$',db='server_change',charset="utf8")
@@ -93,6 +94,31 @@ def delete_no_use():
 
 
 
+def check_sentinel(num_of_sentinel):
+    conn = pymysql.connect(host='192.168.1.6', port=3306, user='mozis', passwd='ktlshy34YU$',db='server_change',charset="utf8")
+    cursor = conn.cursor()
+    cursor.execute("select count(*) from redis_sentinel where sentinel != {0};".format(num_of_sentinel))
+    count_sentinel = cursor.fetchall()
+    #print(count_sentinel[0][0])
+    if count_sentinel[0][0] == 0:
+        conn.close()
+        print("check sentinel ok")
+        return 1
+    else:
+        cursor.execute("select master_name,sentinel from redis_sentinel where sentinel != {0};".format(num_of_sentinel))
+        error_sentinel = cursor.fetchall()
+        conn.close()
+        #print(error_sentinel)
+        for li in error_sentinel:
+            #print (li)
+            print("ERROR sentinel for {0} is {1}".format(li[0],li[1]))
+        return 2
+
+
+
+
+
+
 
 def main():
     sentinel_get=all_sentinel_get()
@@ -101,6 +127,11 @@ def main():
     if delete_note != 1:
         print("ERROR")
         return("ERROR")
+    check_sentinel_note=check_sentinel(num_of_sentinel)
+    if check_sentinel_note != 1:
+        #print("ERROR")
+        return("ERROR")
+    print("done")
 
 
 
