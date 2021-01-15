@@ -9,14 +9,14 @@ import hashlib
 #3.抓取列名到列表
 
 
-master_host = '192.168.21.128'
+master_host = '192.168.1.6'
 master_port = 3306
 master_user = 'mozis'
 master_pass = 'ktlshy34YU$'
 master_database_name = 'zzztest'
-tablename = 'sbtest20'
+tablename = 'sbtest10min'
 #tablename = 'test50'
-slave_host = '192.168.21.128'
+slave_host = '192.168.1.6'
 slave_port = 3306
 slave_user = 'mozis'
 slave_pass = 'ktlshy34YU$'
