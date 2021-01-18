@@ -15,13 +15,21 @@
 
 
 import pymysql
+list_pri=[]
 conn = pymysql.connect(host='192.168.1.6', port=3306, user='mozis', passwd='ktlshy34YU$',db='zzztest',charset="utf8")
 cursor = conn.cursor()
-cursor.execute("select * from sbtest1min;")
+cursor.execute("select id from sbtest10;")
 #count = cursor.fetchall()
 #count = cursor.fetchmany(5)
-t=10
-for i in range(t):
-    count = cursor.fetchmany(5)
-    print(count)
+while True:
+    count = cursor.fetchmany(2)
+    list_pri=[]
+    for i in count:
+        list_pri.append(i[0])
+    if count == ():
+        break
+    print(list_pri)
+tuple_list_pri=tuple(list_pri)
+#print(tuple_list_pri)
 conn.close()
+

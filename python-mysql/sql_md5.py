@@ -53,47 +53,84 @@ def row_check(master_host,master_port,master_user,master_pass,master_database_na
     #print(pri)
     #主键值
     cursor.execute("select {0} from {1} ".format(pri,tablename)) ########limit1
-    list_tmp1 = cursor.fetchall()  ###未处理的主键值
+    #list_tmp1 = cursor.fetchall()  ###未处理的主键值
+    while True:
+        list_pri = []
+        list_tmp1 = cursor.fetchmany(1000)
+        #print(list_pri)
+        if list_tmp1 == ():
+            break
+        for i in list_tmp1:
+            list_pri.append(i[0])
+        host=master_host
+        port=master_port
+        user=master_user
+        password=master_pass
+        database_name=master_database_name
+        buchang_in_pri=tuple(list_pri)
+        master_md5=md5(database_name,tablename,pri,buchang_in_pri,host,port,user,password,columns)
+        host=slave_host
+        port=slave_port
+        user=slave_user
+        password=slave_pass
+        database_name=slave_database_name
+        slave_md5=md5(database_name,tablename,pri,buchang_in_pri,host,port,user,password,columns)
+        #print(master_md5)
+        #print(slave_md5)
+        if master_md5 == slave_md5:
+            #print("{0} check ok!".format(buchang_in_pri))
+            logger.debug("{0} to {1} check ok!".format(min(buchang_in_pri),max(buchang_in_pri)))
+            #min+=1000
+        else:
+            list_error.append(buchang_in_pri)
+            print("{0} check error!".format(buchang_in_pri))
+            #min+=1000
+        #if list_tmp1 == ():
+           #break
+        #print(buchang_in_pri)
+    
+
+
     #print(type(list_num))
     #print(list_num)
     #pri = "".join('%s' %i for id in list_pri for i in id)
-    for i in list_tmp1:
-        list_pri.append(i[0])
-    len_list2=len(list_pri)
-    #print(list_pri)  #####主键值
-    min=0
-    while True:
-        max=min+1000
-        if max <= len_list2:
-            buchang_in_pri=tuple(list_pri[min:max])
-            #print(buchang_in_pri)
-            host=master_host
-            port=master_port
-            user=master_user
-            password=master_pass
-            database_name=master_database_name
-            master_md5=md5(database_name,tablename,pri,buchang_in_pri,host,port,user,password,columns)
-            host=slave_host
-            port=slave_port
-            user=slave_user
-            password=slave_pass
-            database_name=slave_database_name
-            slave_md5=md5(database_name,tablename,pri,buchang_in_pri,host,port,user,password,columns)
-            #print(master_md5)
-            #print(slave_md5)
-            if master_md5 == slave_md5:
-                #print("{0} check ok!".format(buchang_in_pri))
-                logger.debug("{0} check ok!".format(min))
-                min+=1000
-            else:
-                list_error.append(buchang_in_pri)
-                print("{0} check error!".format(buchang_in_pri))
-                min+=1000
-                #break
-            #print(min)
-        else:
-            print('将要填写logging')
-            break
+    ##for i in list_tmp1:
+    ##    list_pri.append(i[0])
+    ##len_list2=len(list_pri)
+    ###print(list_pri)  #####主键值
+    ##min=0
+    ##while True:
+    ##    max=min+1000
+    ##    if max <= len_list2:
+    ##        buchang_in_pri=tuple(list_pri[min:max])
+    ##        print(buchang_in_pri)
+    ##        host=master_host
+    ##        port=master_port
+    ##        user=master_user
+    ##        password=master_pass
+    ##        database_name=master_database_name
+    ##        master_md5=md5(database_name,tablename,pri,buchang_in_pri,host,port,user,password,columns)
+    ##        host=slave_host
+    ##        port=slave_port
+    ##        user=slave_user
+    ##        password=slave_pass
+    ##        database_name=slave_database_name
+    ##        slave_md5=md5(database_name,tablename,pri,buchang_in_pri,host,port,user,password,columns)
+    ##        #print(master_md5)
+    ##        #print(slave_md5)
+    ##        if master_md5 == slave_md5:
+    ##            #print("{0} check ok!".format(buchang_in_pri))
+    ##            logger.debug("{0} check ok!".format(min))
+    ##            min+=1000
+    ##        else:
+    ##            list_error.append(buchang_in_pri)
+    ##            print("{0} check error!".format(buchang_in_pri))
+    ##            min+=1000
+    ##            #break
+    ##        #print(min)
+    ##    else:
+    ##        print('将要填写logging')
+    ##        break
     #print(list_pri[min:max])
     #print(len_list2)
     #for x in itertools.count(0,1):
@@ -132,6 +169,7 @@ def md5(database_name,tablename,pri,buchang_in_pri,host,port,user,password,colum
     #print(columns)
     #行数据
     #for iii in list_pri:
+    #print(buchang_in_pri)
     cursor.execute("select {0} from {1} where {2} in {3}".format(columns,tablename,pri,buchang_in_pri))
     count = cursor.fetchall()
     row = "".join('%s' %i for id in count for i in id)
