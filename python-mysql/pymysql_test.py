@@ -33,32 +33,43 @@
 ##print(tuple_list_pri)
 #conn.close()
 
-import random
-import time
-from multiprocessing import Pool
-from multiprocessing.dummy import Pool as ThreadPool
+#import random
+#import time
+#from multiprocessing import Pool
+#from multiprocessing.dummy import Pool as ThreadPool
+#
+#parallel=1
+#def a(p):
+#    p=p+1
+#    print("a =={0}".format(p))
+#    return(p)
+#
+#
+#def b(d):
+#    print("b =={0}".format(d))
+#
+#def print_error(value,):
+#    print("error: ", value)
+#
+#if __name__=="__main__":
+#    pool = Pool(processes=2)
+#    for i in range(10):
+#        zz=random.randrange(10)
+#        print(zz)
+#        pool.apply_async(func=a,args=(zz,),callback=b,error_callback=print_error)
+#        #pool.apply_async(func=b,args=(q,),error_callback=print_error)
+#        time.sleep(2)
+#        #check_row_num(master_host,master_port,master_user,master_pass,master_database_name,slave_host,slave_port,slave_user,slave_pass,slave_database_name)
+#    pool.close()
+#    pool.join()
 
-parallel=1
-def a(p):
-    p=p+1
-    print("a =={0}".format(p))
-    return(p)
 
 
-def b(d):
-    print("b =={0}".format(d))
 
-def print_error(value,):
-    print("error: ", value)
+def check(n):
+    if n == None:
+        return n
 
-if __name__=="__main__":
-    pool = Pool(processes=2)
-    for i in range(10):
-        zz=random.randrange(10)
-        print(zz)
-        pool.apply_async(func=a,args=(zz,),callback=b,error_callback=print_error)
-        #pool.apply_async(func=b,args=(q,),error_callback=print_error)
-        time.sleep(2)
-        #check_row_num(master_host,master_port,master_user,master_pass,master_database_name,slave_host,slave_port,slave_user,slave_pass,slave_database_name)
-    pool.close()
-    pool.join()
+tuple1=(9, 27)
+tuple2=list(filter(None,tuple1))
+print(tuple2)
