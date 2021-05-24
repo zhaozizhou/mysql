@@ -20,7 +20,7 @@ master = sentinel.master_for('mymaster',socket_timeout=0.5,db=0,encoding='utf-8'
 #3.抓取列名到列表
 
 parallel=5
-parallel_table_long=10
+parallel_table_long=5000
 master_host = '192.168.1.6'
 master_port = 3306
 master_user = 'mozis'
@@ -160,7 +160,7 @@ def row_check(master_host,master_port,master_user,master_pass,master_database_na
         #cursor = conn.cursor(pymysql.cursors.DictCursor)
         cursor = conn.cursor()
         cursor.execute("select {0} from {1} ".format(pri,tablename))
-        tpool = ThreadPool(10)# 创建一个线程池，20个线程数
+        tpool = ThreadPool(20)# 创建一个线程池，20个线程数
         while True:
             #list_pri = []
             list_tmp2 = cursor.fetchmany(parallel_table_long) #######mysql取多少数据
@@ -180,7 +180,7 @@ def row_check(master_host,master_port,master_user,master_pass,master_database_na
         #cursor = conn.cursor(pymysql.cursors.DictCursor)
         #cursor = conn.cursor()
         #cursor.execute("select {0} from {1} ".format(pri,tablename))
-        tpool = ThreadPool(10)# 创建一个线程池，20个线程数
+        tpool = ThreadPool(50)# 创建一个线程池，20个线程数
         list_tmp2=list_tmp1
         for list_tmp1 in list_tmp2:
         #while True:
@@ -283,6 +283,7 @@ def last_check():
     for tablename in list_table_name:
         count_error=master.scard(tablename)
         if count_error == 0:
+            print("{0} check ok!".format(tablename))
             continue
         else:
             #parallel_table_long=1
